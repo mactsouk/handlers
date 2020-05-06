@@ -10,3 +10,9 @@ type User struct {
 	Admin     bool      `json:"admin"`
 	Active    bool      `json:"active"`
 }
+
+type Input struct {
+	Username string `json:"user"`
+	Password string `json:"password"`
+	Admin    bool   `json:"admin"`
+}
