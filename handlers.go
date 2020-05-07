@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"log"
 	"net/http"
 )
 
@@ -11,21 +12,26 @@ func DefaultHandler(rw http.ResponseWriter, r *http.Request) {
 
 // TimeHandler is for handling /time
 func TimeHandler(rw http.ResponseWriter, r *http.Request) {
+	log.Println("Serving:", r.URL.Path, "from", r.Host)
 
 }
 
-func AddHander(rw http.ResponseWriter, r *http.Request) {
+func AddHandler(rw http.ResponseWriter, r *http.Request) {
+	log.Println("Serving:", r.URL.Path, "from", r.Host)
 
 }
 
-func DeleteHander(rw http.ResponseWriter, r *http.Request) {
+func DeleteHandler(rw http.ResponseWriter, r *http.Request) {
+	log.Println("Serving:", r.URL.Path, "from", r.Host)
 
 }
 
-func GetAllHanlder(rw http.ResponseWriter, r *http.Request) {
+func GetAllHandler(rw http.ResponseWriter, r *http.Request) {
+	log.Println("Serving:", r.URL.Path, "from", r.Host)
 
 }
 
 func GetHandler(rw http.ResponseWriter, r *http.Request) {
+	log.Println("Serving:", r.URL.Path, "from", r.Host)
 
 }
