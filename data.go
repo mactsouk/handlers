@@ -1,6 +1,10 @@
 package handlers
 
-import "time"
+import (
+	"time"
+
+	_ "github.com/mattn/go-sqlite3"
+)
 
 type User struct {
 	ID        int       `json:"id"`
@@ -15,4 +19,20 @@ type Input struct {
 	Username string `json:"user"`
 	Password string `json:"password"`
 	Admin    bool   `json:"admin"`
+}
+
+func AddUser() {
+
+}
+
+func DeleteUser() {
+
+}
+
+func ReturnAllUsers() {
+
+}
+
+func FindUser() {
+
 }
