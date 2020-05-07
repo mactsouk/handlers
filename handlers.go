@@ -4,10 +4,10 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func defaultHandler() {
+func DefaultHandler() {
 
 }
 
-func timeHandler() {
+func TimeHandler() {
 
 }
