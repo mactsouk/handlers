@@ -11,7 +11,7 @@ import (
 
 // DefaultHandler is for handling /
 func DefaultHandler(rw http.ResponseWriter, r *http.Request) {
-	log.Println("Serving:", r.URL.Path, "from", r.Host)
+	log.Println("Serving:", r.URL.Path, "from", r.Host, "with method", r.Method)
 	rw.WriteHeader(http.StatusNotFound)
 	Body := "Thanks for visiting!\n"
 	fmt.Fprintf(rw, "%s", Body)
@@ -19,7 +19,7 @@ func DefaultHandler(rw http.ResponseWriter, r *http.Request) {
 
 // MethodNotAllowedHandler is executed when the method is incorrect
 func MethodNotAllowedHandler(rw http.ResponseWriter, r *http.Request) {
-	log.Println("Serving:", r.URL.Path, "from", r.Host)
+	log.Println("Serving:", r.URL.Path, "from", r.Host, "with method", r.Method)
 	rw.WriteHeader(http.StatusNotFound)
 	Body := "Method not allowed!\n"
 	fmt.Fprintf(rw, "%s", Body)
