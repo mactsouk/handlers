@@ -30,7 +30,7 @@ func AddUser(u User) bool {
 }
 
 // DeleteUser is for deleting a user defined by ID
-func DeleteUser(int ID) bool {
+func DeleteUser(ID int) bool {
 
 	return true
 }
@@ -42,15 +42,15 @@ func ReturnAllUsers() []User {
 }
 
 // FindUserID is for returning a user record defined by ID
-func FindUserID(int ID) User {
+func FindUserID(ID int) User {
 
-	return nil
+	return User{}
 }
 
 // FindUserUsername is for returning a user record defined by username
-func FindUserUsername(string username) User {
+func FindUserUsername(username string) User {
 
-	return nil
+	return User{}
 }
 
 // FromJSON decodes a serialized JSON record
