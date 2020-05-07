@@ -9,6 +9,7 @@ import (
 
 // DefaultHandler is for handling /
 func DefaultHandler(rw http.ResponseWriter, r *http.Request) {
+	log.Println("Serving:", r.URL.Path, "from", r.Host)
 
 }
 
