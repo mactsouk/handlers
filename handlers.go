@@ -35,3 +35,8 @@ func GetHandler(rw http.ResponseWriter, r *http.Request) {
 	log.Println("Serving:", r.URL.Path, "from", r.Host)
 
 }
+
+func UpdateHandler(rw http.ResponseWriter, r *http.Request) {
+	log.Println("Serving:", r.URL.Path, "from", r.Host)
+
+}
