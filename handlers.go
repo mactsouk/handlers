@@ -37,7 +37,7 @@ func GetAllHandler(rw http.ResponseWriter, r *http.Request) {
 func GetHandler(rw http.ResponseWriter, r *http.Request) {
 	log.Println("Serving:", r.URL.Path, "from", r.Host)
 
-	v, ok := mux.Vars(r)["id"]
+	id, ok := mux.Vars(r)["id"]
 	if ok {
 		log.Println("ID:", id)
 	} else {
