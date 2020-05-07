@@ -17,6 +17,14 @@ func DefaultHandler(rw http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(rw, "%s", Body)
 }
 
+// MethodNotAllowedHander is executed when the method is incorrect
+func MethodNotAllowedHander(rw http.ResponseWriter, r *http.Request) {
+	log.Println("Serving:", r.URL.Path, "from", r.Host)
+	rw.WriteHeader(http.StatusNotFound)
+	Body := "Method not allowed!\n"
+	fmt.Fprintf(rw, "%s", Body)
+}
+
 // TimeHandler is for handling /time
 func TimeHandler(rw http.ResponseWriter, r *http.Request) {
 	log.Println("Serving:", r.URL.Path, "from", r.Host)
