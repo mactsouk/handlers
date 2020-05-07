@@ -37,9 +37,13 @@ func GetAllHandler(rw http.ResponseWriter, r *http.Request) {
 func GetHandler(rw http.ResponseWriter, r *http.Request) {
 	log.Println("Serving:", r.URL.Path, "from", r.Host)
 
-	for k, v := range mux.Vars(r) {
-		log.Println("K:", k, "v:", v)
+	v, ok := mux.Vars(r)["id"]
+	if ok {
+		log.Println("ID:", id)
+	} else {
+		log.Println("ID value not set!")
 	}
+
 }
 
 func UpdateHandler(rw http.ResponseWriter, r *http.Request) {
