@@ -14,7 +14,7 @@ func DefaultHandler(rw http.ResponseWriter, r *http.Request) {
 	log.Println("Serving:", r.URL.Path, "from", r.Host)
 	rw.WriteHeader(http.StatusNotFound)
 	Body := "Thanks for visiting!\n"
-	fmt.Fprintf(w, "%s", Body)
+	fmt.Fprintf(rw, "%s", Body)
 }
 
 // TimeHandler is for handling /time
@@ -22,7 +22,7 @@ func TimeHandler(rw http.ResponseWriter, r *http.Request) {
 	log.Println("Serving:", r.URL.Path, "from", r.Host)
 	t := time.Now().Format(time.RFC1123)
 	Body := "The current time is: " + t + "\n"
-	fmt.Fprintf(w, "%s", Body)
+	fmt.Fprintf(rw, "%s", Body)
 }
 
 func AddHandler(rw http.ResponseWriter, r *http.Request) {
