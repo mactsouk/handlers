@@ -13,7 +13,7 @@ import (
 func DefaultHandler(rw http.ResponseWriter, r *http.Request) {
 	log.Println("Serving:", r.URL.Path, "from", r.Host, "with method", r.Method)
 	rw.WriteHeader(http.StatusNotFound)
-	Body := "Thanks for visiting!\n"
+	Body := r.URL.Path + " does not exist. Thanks for visiting!\n"
 	fmt.Fprintf(rw, "%s", Body)
 }
 
