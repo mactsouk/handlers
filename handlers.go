@@ -92,3 +92,9 @@ func LogoutHandler(rw http.ResponseWriter, r *http.Request) {
 	log.Println("Serving:", r.URL.Path, "from", r.Host)
 
 }
+
+// LoggedUsersHandler returns the list of currently logged in users
+func LoggedUsersHandler(rw http.ResponseWriter, r *http.Request) {
+	log.Println("Serving:", r.URL.Path, "from", r.Host)
+
+}
