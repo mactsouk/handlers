@@ -13,7 +13,7 @@ import (
 func DefaultHandler(rw http.ResponseWriter, r *http.Request) {
 	log.Println("Serving:", r.URL.Path, "from", r.Host, "with method", r.Method)
 	rw.WriteHeader(http.StatusNotFound)
-	Body := r.URL.Path + " does not exist. Thanks for visiting!\n"
+	Body := r.URL.Path + " is not supported. Thanks for visiting!\n"
 	fmt.Fprintf(rw, "%s", Body)
 }
 
@@ -33,24 +33,15 @@ func TimeHandler(rw http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(rw, "%s", Body)
 }
 
+// AddHandler is for adding a new user
 func AddHandler(rw http.ResponseWriter, r *http.Request) {
 	log.Println("Serving:", r.URL.Path, "from", r.Host)
 
 }
 
+// DeleteHandler is for deleting an existing user + DELETE
 func DeleteHandler(rw http.ResponseWriter, r *http.Request) {
 	log.Println("Serving:", r.URL.Path, "from", r.Host)
-
-}
-
-func GetAllHandler(rw http.ResponseWriter, r *http.Request) {
-	log.Println("Serving:", r.URL.Path, "from", r.Host)
-
-}
-
-func GetHandler(rw http.ResponseWriter, r *http.Request) {
-	log.Println("Serving:", r.URL.Path, "from", r.Host)
-
 	id, ok := mux.Vars(r)["id"]
 	if ok {
 		log.Println("ID:", id)
@@ -60,21 +51,43 @@ func GetHandler(rw http.ResponseWriter, r *http.Request) {
 
 }
 
-func GetUserDataHandler(rw http.ResponseWriter, r *http.Request) {
+// GetAllHandler is for getting all data from the user database
+func GetAllHandler(rw http.ResponseWriter, r *http.Request) {
 	log.Println("Serving:", r.URL.Path, "from", r.Host)
 
 }
 
+// GetIDHandler returns the ID of an existing user
+func GetIDHandler(rw http.ResponseWriter, r *http.Request) {
+	log.Println("Serving:", r.URL.Path, "from", r.Host)
+
+}
+
+// GetUserDataHandler + GET returns the full record of a user
+func GetUserDataHandler(rw http.ResponseWriter, r *http.Request) {
+	log.Println("Serving:", r.URL.Path, "from", r.Host)
+	id, ok := mux.Vars(r)["id"]
+	if ok {
+		log.Println("ID:", id)
+	} else {
+		log.Println("ID value not set!")
+	}
+
+}
+
+// UpdateHandler is for updating the data of an existing user + PUT
 func UpdateHandler(rw http.ResponseWriter, r *http.Request) {
 	log.Println("Serving:", r.URL.Path, "from", r.Host)
 
 }
 
+// LoginHandler is for updating the Login time of a user
 func LoginHandler(rw http.ResponseWriter, r *http.Request) {
 	log.Println("Serving:", r.URL.Path, "from", r.Host)
 
 }
 
+// LogoutHandler is for logging out a user
 func LogoutHandler(rw http.ResponseWriter, r *http.Request) {
 	log.Println("Serving:", r.URL.Path, "from", r.Host)
 
