@@ -23,6 +23,11 @@ type Input struct {
 	Admin    bool   `json:"admin"`
 }
 
+type UserPass struct {
+	Username string `json:"user"`
+	Password string `json:"password"`
+}
+
 // AddUser is for adding a new user to the database
 func AddUser(u User) bool {
 
