@@ -123,13 +123,12 @@ func DeleteUser(ID int) bool {
 	}
 	defer db.Close()
 
-	stmt, _ := db.Prepare("DELETE FROM users WHERE id = (?)")
+	stmt, _ := db.Prepare("DELETE FROM users WHERE ID = ?")
 	if err != nil {
 		log.Println("Adduser:", err)
 		return false
 	}
 	stmt.Exec(ID)
-
 	return true
 }
 
@@ -176,12 +175,14 @@ func FindUserID(ID int) User {
 	}
 	defer db.Close()
 
-	query := "SELECT * FROM users WHERE id =" + string(ID)
-	rows, _ := db.Query(query)
+	rows, err := db.Query("SELECT * FROM users where ID = $1", ID)
 	if err != nil {
-		log.Println("Adduser:", err)
+		log.Println("Prepare:", err)
 		return User{}
 	}
+	defer rows.Close()
+
+	log.Println("Rows:", rows)
 
 	u := User{}
 	var c1 int
