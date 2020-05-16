@@ -106,7 +106,6 @@ func DeleteHandler(rw http.ResponseWriter, r *http.Request) {
 // GetAllHandler is for getting all data from the user database
 func GetAllHandler(rw http.ResponseWriter, r *http.Request) {
 	log.Println("Serving:", r.URL.Path, "from", r.Host)
-
 	d, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		rw.WriteHeader(http.StatusBadRequest)
@@ -134,7 +133,7 @@ func GetAllHandler(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := SliceToJSON(ReturnAllUsers(), rw)
+	err = SliceToJSON(ReturnAllUsers(), rw)
 	if err != nil {
 		log.Println(err)
 		rw.WriteHeader(http.StatusBadRequest)
