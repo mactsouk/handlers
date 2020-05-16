@@ -69,6 +69,12 @@ func SliceToJSON(slice interface{}, w io.Writer) error {
 	return e.Encode(slice)
 }
 
+// SliceFromJSON decodes a slice with JSON records
+func SliceFromJSON(slice interface{}, r io.Reader) error {
+	e := json.NewDecoder(r)
+	return e.Decode(slice)
+}
+
 // AddUser is for adding a new user to the database
 func AddUser(u User) bool {
 	log.Println("Adding user:", u)
