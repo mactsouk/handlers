@@ -13,8 +13,6 @@ import (
 
 var SQLFILE = "/tmp/users.db"
 
-var USERID = 0
-
 type User struct {
 	ID        int    `json:"id"`
 	Username  string `json:"user"`
@@ -60,11 +58,15 @@ func AddUser(u User) bool {
 		log.Println(nil)
 		return false
 	}
+	defer db.Close()
 
-	stmt, _ := db.Prepare("INSERT INTO user(ID, Username, Password, Lastlogin, Admin, Active) values(?,?,?,?,?,?)")
-	_, _ = stmt.Exec(u.ID, u.Username, u.Password, u.LastLogin, u.Admin, u.Active)
+	stmt, err := db.Prepare("INSERT INTO user(Username, Password, Lastlogin, Admin, Active) values(?,?,?,?,?)")
+	if err != nil {
+		log.Println(nil)
+		return false
+	}
 
-	USERID++
+	stmt.Exec(u.ID, u.Username, u.Password, u.LastLogin, u.Admin, u.Active)
 	return true
 }
 
@@ -72,6 +74,7 @@ func AddUser(u User) bool {
 func CreateDatabase() bool {
 	log.Println("Writing to SQLite3:", SQLFILE)
 	db, err := sql.Open("sqlite3", SQLFILE)
+	defer db.Close()
 
 	if err != nil {
 		log.Println(nil)
@@ -82,14 +85,14 @@ func CreateDatabase() bool {
 	_, _ = db.Exec("DROP TABLE users")
 
 	log.Println("Creating table from scratch.")
-	_, err = db.Exec("CREATE TABLE users (ID INT, Username STRING, Password STRING, Lastlogin INT64, Admin Bool, Active Bool);")
+	_, err = db.Exec("CREATE TABLE users (ID integer NOT NULL PRIMARY KEY AUTOINCREMENT, Username TEXT, Password TEXT, Lastlogin integer, Admin Bool, Active Bool);")
 	if err != nil {
 		log.Println(nil)
 		return false
 	}
 
 	log.Println("Populating", SQLFILE)
-	admin := User{USERID, "admin", "admin", time.Now().Unix(), true, true}
+	admin := User{0, "admin", "admin", time.Now().Unix(), true, false}
 
 	t, _ := PrettyJSON(admin)
 	log.Println(t)
