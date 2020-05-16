@@ -168,7 +168,7 @@ func ReturnAllUsers() []User {
 
 // FindUserID is for returning a user record defined by ID
 func FindUserID(ID int) User {
-	log.Println("Deleting from SQLite3:", ID)
+	log.Println("Get User Data from SQLite3:", ID)
 	db, err := sql.Open("sqlite3", SQLFILE)
 	if err != nil {
 		log.Println(err)
@@ -176,7 +176,7 @@ func FindUserID(ID int) User {
 	}
 	defer db.Close()
 
-	query := "SELECT  FROM users WHERE id =" + string(ID)
+	query := "SELECT * FROM users WHERE id =" + string(ID)
 	rows, _ := db.Query(query)
 	if err != nil {
 		log.Println("Adduser:", err)
