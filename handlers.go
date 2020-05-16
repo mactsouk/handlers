@@ -128,7 +128,7 @@ func GetAllHandler(rw http.ResponseWriter, r *http.Request) {
 	}
 
 	if !IsUserValid(user) {
-		log.Println("User", user.Username, "exists!")
+		log.Println("User", user, "does not exist!")
 		rw.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -213,7 +213,7 @@ func LoginHandler(rw http.ResponseWriter, r *http.Request) {
 	log.Println("Input user:", user)
 
 	if !IsUserValid(user) {
-		log.Println("User", user.Username, "exists!")
+		log.Println("User", user.Username, "not valid!")
 		rw.WriteHeader(http.StatusBadRequest)
 		return
 	}

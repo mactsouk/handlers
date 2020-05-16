@@ -371,6 +371,7 @@ func IsUserValid(u UserPass) bool {
 		temp = User{c1, c2, c3, c4, c5, c6}
 	}
 
+	log.Println("***", u, "***", temp)
 	if u.Username == temp.Username && u.Password == temp.Password {
 		return true
 	}
