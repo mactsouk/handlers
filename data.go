@@ -85,7 +85,7 @@ func AddUser(u User) bool {
 	}
 	defer db.Close()
 
-	stmt, err := db.Prepare("INSERT INTO users(Username, Password, Lastlogin, Admin, Active) values(?,?,?,?,?)")
+	stmt, err := db.Prepare("INSERT INTO users(Username, Password, LastLogin, Admin, Active) values(?,?,?,?,?)")
 	if err != nil {
 		log.Println("Adduser:", err)
 		return false
@@ -106,10 +106,10 @@ func UpdateUser(u User) bool {
 	defer db.Close()
 
 	stmt := `UPDATE users
-	SET Username = $2, Password = $3, Admin = $4, Lastlogin = $5, Active = $6
+	SET Username = $2, Password = $3, LastLogin = $4, Admin = $4, Active = $6
 	WHERE ID = $1;`
 
-	_, err = db.Exec(stmt, u.ID, u.Username, u.Password, u.Admin, u.LastLogin, u.Active)
+	_, err = db.Exec(stmt, u.ID, u.Username, u.Password, u.LastLogin, u.Admin, u.Active)
 	if err != nil {
 		log.Println("Update failed:", err)
 		return false
