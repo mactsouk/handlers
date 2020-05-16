@@ -35,6 +35,11 @@ type UserPass struct {
 	Password string `json:"password"`
 }
 
+const (
+	empty = ""
+	tab   = "\t"
+)
+
 func PrettyJSON(data interface{}) (string, error) {
 	buffer := new(bytes.Buffer)
 	encoder := json.NewEncoder(buffer)
