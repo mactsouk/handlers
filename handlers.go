@@ -174,7 +174,7 @@ func GetIDHandler(rw http.ResponseWriter, r *http.Request) {
 	}
 
 	t := FindUserUsername(user.Username)
-	Body := user.Username + " has ID: " + t.ID + "\n"
+	Body := user.Username + " has ID: " + string(t.ID) + "\n"
 	fmt.Fprintf(rw, "%s", Body)
 }
 
