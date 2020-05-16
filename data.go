@@ -100,7 +100,8 @@ func ReturnAllUsers() []User {
 
 	all := []User{}
 	var c1 int
-	var c2, c3, c4 string
+	var c2, c3 string
+	var c4 int64
 	var c5, c6 bool
 
 	for rows.Next() {
