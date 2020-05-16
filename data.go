@@ -38,6 +38,7 @@ const (
 	tab   = "\t"
 )
 
+// PrettyJSON is for pretty printing JSON records
 func PrettyJSON(data interface{}) (string, error) {
 	buffer := new(bytes.Buffer)
 	encoder := json.NewEncoder(buffer)
@@ -91,12 +92,11 @@ func AddUser(u User) bool {
 func CreateDatabase() bool {
 	log.Println("Writing to SQLite3:", SQLFILE)
 	db, err := sql.Open("sqlite3", SQLFILE)
-	defer db.Close()
-
 	if err != nil {
 		log.Println(err)
 		return false
 	}
+	defer db.Close()
 
 	log.Println("Emptying database table.")
 	_, _ = db.Exec("DROP TABLE users")
@@ -115,6 +115,20 @@ func CreateDatabase() bool {
 
 // DeleteUser is for deleting a user defined by ID
 func DeleteUser(ID int) bool {
+	log.Println("Deleting from SQLite3:", ID)
+	db, err := sql.Open("sqlite3", SQLFILE)
+	if err != nil {
+		log.Println(err)
+		return false
+	}
+	defer db.Close()
+
+	stmt, _ := db.Prepare("DELETE FROM users WHERE id = (?)")
+	if err != nil {
+		log.Println("Adduser:", err)
+		return false
+	}
+	stmt.Exec(ID)
 
 	return true
 }
@@ -127,6 +141,7 @@ func ReturnAllUsers() []User {
 		log.Println(err)
 		return nil
 	}
+	defer db.Close()
 
 	rows, err := db.Query("SELECT * FROM users")
 	if err != nil {
@@ -153,8 +168,33 @@ func ReturnAllUsers() []User {
 
 // FindUserID is for returning a user record defined by ID
 func FindUserID(ID int) User {
+	log.Println("Deleting from SQLite3:", ID)
+	db, err := sql.Open("sqlite3", SQLFILE)
+	if err != nil {
+		log.Println(err)
+		return User{}
+	}
+	defer db.Close()
 
-	return User{}
+	query := "SELECT  FROM users WHERE id =" + string(ID)
+	rows, _ := db.Query(query)
+	if err != nil {
+		log.Println("Adduser:", err)
+		return User{}
+	}
+
+	u := User{}
+	var c1 int
+	var c2, c3 string
+	var c4 int64
+	var c5, c6 bool
+
+	for rows.Next() {
+		err = rows.Scan(&c1, &c2, &c3, &c4, &c5, &c6)
+		u = User{c1, c2, c3, c4, c5, c6}
+		log.Println("Found user:", u)
+	}
+	return u
 }
 
 // FindUserUsername is for returning a user record defined by username

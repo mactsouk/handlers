@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -44,12 +45,29 @@ func AddHandler(rw http.ResponseWriter, r *http.Request) {
 func DeleteHandler(rw http.ResponseWriter, r *http.Request) {
 	log.Println("Serving:", r.URL.Path, "from", r.Host)
 	id, ok := mux.Vars(r)["id"]
-	if ok {
-		log.Println("ID:", id)
-	} else {
+	if !ok {
 		log.Println("ID value not set!")
+		rw.WriteHeader(http.StatusNotFound)
+		return
 	}
 
+	log.Println("ID:", id)
+
+	intID, err := strconv.Atoi(id)
+	if err != nil {
+		log.Println("id", err)
+		return
+	}
+
+	t := FindUserID(intID)
+	if t.Username != "" {
+		del := DeleteUser(intID)
+		if del {
+			log.Println("User deleted:", id)
+			rw.WriteHeader(http.StatusOK)
+		}
+	}
+	rw.WriteHeader(http.StatusNotFound)
 }
 
 // GetAllHandler is for getting all data from the user database
@@ -62,15 +80,6 @@ func GetAllHandler(rw http.ResponseWriter, r *http.Request) {
 		rw.WriteHeader(http.StatusBadRequest)
 		return
 	}
-
-	//	for _, d := range ReturnAllUsers() {
-	//		err := d.ToJSON(rw)
-	//		if err != nil {
-	//			log.Println(err)
-	//			rw.WriteHeader(http.StatusBadRequest)
-	//			return
-	//		}
-	//	}
 }
 
 // GetIDHandler returns the ID of an existing user
@@ -83,12 +92,27 @@ func GetIDHandler(rw http.ResponseWriter, r *http.Request) {
 func GetUserDataHandler(rw http.ResponseWriter, r *http.Request) {
 	log.Println("Serving:", r.URL.Path, "from", r.Host)
 	id, ok := mux.Vars(r)["id"]
-	if ok {
-		log.Println("ID:", id)
-	} else {
+	if !ok {
 		log.Println("ID value not set!")
+		rw.WriteHeader(http.StatusBadRequest)
 	}
 
+	intID, err := strconv.Atoi(id)
+	if err != nil {
+		log.Println("id", err)
+		rw.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	t := FindUserID(intID)
+	if t.Username != "" {
+		err := t.ToJSON(rw)
+		if err != nil {
+			rw.WriteHeader(http.StatusBadRequest)
+			log.Println(err)
+		}
+	}
+	rw.WriteHeader(http.StatusBadRequest)
 }
 
 // UpdateHandler is for updating the data of an existing user + PUT
