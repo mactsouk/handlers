@@ -106,7 +106,7 @@ func UpdateUser(u User) bool {
 	defer db.Close()
 
 	stmt := `UPDATE users
-	SET Username = $2, Password = $3, Admin = $4, LastLogin = $5, Active = $6
+	SET Username = $2, Password = $3, Admin = $4, Lastlogin = $5, Active = $6
 	WHERE ID = $1;`
 
 	_, err = db.Exec(stmt, u.ID, u.Username, u.Password, u.Admin, u.LastLogin, u.Active)
