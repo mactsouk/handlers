@@ -202,7 +202,7 @@ func FindUserID(ID int) User {
 
 // FindUserUsername is for returning a user record defined by username
 func FindUserUsername(username string) User {
-	log.Println("Get User Data from SQLite3:", ID)
+	log.Println("Get User Data from SQLite3:", username)
 	db, err := sql.Open("sqlite3", SQLFILE)
 	if err != nil {
 		log.Println(err)
