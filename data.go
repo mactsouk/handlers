@@ -1,9 +1,9 @@
 package handlers
 
 import (
+	"bytes"
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"io"
 	"log"
 	"time"
@@ -33,6 +33,18 @@ type Input struct {
 type UserPass struct {
 	Username string `json:"user"`
 	Password string `json:"password"`
+}
+
+func PrettyJSON(data interface{}) (string, error) {
+	buffer := new(bytes.Buffer)
+	encoder := json.NewEncoder(buffer)
+	encoder.SetIndent(empty, tab)
+
+	err := encoder.Encode(data)
+	if err != nil {
+		return empty, err
+	}
+	return buffer.String(), nil
 }
 
 // AddUser is for adding a new user to the database
@@ -71,8 +83,11 @@ func CreateDatabase() bool {
 		return false
 	}
 
-	fmt.Println("Populating", SQLFILE)
+	log.Println("Populating", SQLFILE)
 	admin := User{USERID, "admin", "admin", time.Now().Unix(), true, true}
+
+	t, _ := PrettyJSON(admin)
+	log.Println(t)
 	return AddUser(admin)
 
 }
