@@ -67,13 +67,13 @@ func DeleteHandler(rw http.ResponseWriter, r *http.Request) {
 		if deleted {
 			log.Println("User deleted:", id)
 			rw.WriteHeader(http.StatusOK)
+			return
 		} else {
 			log.Println("Cannot delete user:", id)
 			rw.WriteHeader(http.StatusNotFound)
 		}
 	}
 
-	log.Println("User not found:", id)
 	rw.WriteHeader(http.StatusNotFound)
 }
 
