@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"time"
@@ -198,10 +199,10 @@ func FindUserID(ID int) User {
 			return User{}
 		}
 		u = User{c1, c2, c3, c4, c5, c6}
-		PrettyJSON(u)
 		log.Println("Found user:", u)
+		t, _ := PrettyJSON(u)
+		fmt.Println(t)
 	}
-
 	return u
 }
 
