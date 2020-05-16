@@ -132,7 +132,7 @@ func CreateDatabase() bool {
 	_, _ = db.Exec("DROP TABLE users")
 
 	log.Println("Creating table from scratch.")
-	_, err = db.Exec("CREATE TABLE users (ID integer NOT NULL PRIMARY KEY AUTOINCREMENT, Username TEXT, Password TEXT, Lastlogin integer, Admin Integer, Active Integer);")
+	_, err = db.Exec("CREATE TABLE users (ID integer NOT NULL PRIMARY KEY AUTOINCREMENT, Username TEXT, Password TEXT, Lastlogin integer, Admin integer, Active integer);")
 	if err != nil {
 		log.Println(err)
 		return false
