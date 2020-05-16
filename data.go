@@ -116,6 +116,12 @@ func CreateDatabase() bool {
 
 // DeleteUser is for deleting a user defined by ID
 func DeleteUser(ID int) bool {
+	t := FindUserID(ID)
+	if t.Username == "" {
+		log.Println("Cannot delete use with ID:", ID)
+		return false
+	}
+
 	log.Println("Deleting from SQLite3:", ID)
 	db, err := sql.Open("sqlite3", SQLFILE)
 	if err != nil {
@@ -126,7 +132,7 @@ func DeleteUser(ID int) bool {
 
 	stmt, _ := db.Prepare("DELETE FROM users WHERE ID = ?")
 	if err != nil {
-		log.Println("Adduser:", err)
+		log.Println("DeleteUser:", err)
 		return false
 	}
 	stmt.Exec(ID)
