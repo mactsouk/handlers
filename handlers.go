@@ -60,10 +60,10 @@ func GetAllHandler(rw http.ResponseWriter, r *http.Request) {
 		err := d.ToJSON(rw)
 		if err != nil {
 			log.Println(err)
+			rw.WriteHeader(http.StatusBadRequest)
 			return
 		}
 	}
-	rw.WriteHeader(http.StatusOK)
 }
 
 // GetIDHandler returns the ID of an existing user
