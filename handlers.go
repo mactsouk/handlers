@@ -116,6 +116,8 @@ func GetUserDataHandler(rw http.ResponseWriter, r *http.Request) {
 			rw.WriteHeader(http.StatusBadRequest)
 			log.Println(err)
 		}
+	} else {
+		log.Println("User not found:", id)
 	}
 	rw.WriteHeader(http.StatusBadRequest)
 }
