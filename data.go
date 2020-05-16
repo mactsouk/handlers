@@ -182,11 +182,6 @@ func FindUserID(ID int) User {
 	}
 	defer rows.Close()
 
-	if rows.Next() == false {
-		log.Println("No user found:", ID)
-		return User{}
-	}
-
 	log.Println("Rows:", rows)
 
 	u := User{}
