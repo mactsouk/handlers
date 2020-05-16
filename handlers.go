@@ -53,12 +53,6 @@ func DeleteHandler(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if len(r.Body) == 0 {
-		rw.WriteHeader(http.StatusBadRequest)
-		log.Println("No input!")
-		return
-	}
-
 	d, err := ioutil.ReadAll(r.Body)
 	if len(d) == 0 {
 		rw.WriteHeader(http.StatusBadRequest)
