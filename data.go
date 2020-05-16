@@ -143,7 +143,7 @@ func ReturnAllUsers() []User {
 	}
 	defer db.Close()
 
-	rows, err := db.Query("SELECT * FROM users")
+	rows, err := db.Query("SELECT * FROM users \n")
 	if err != nil {
 		log.Println(err)
 		return nil
@@ -182,8 +182,6 @@ func FindUserID(ID int) User {
 		return User{}
 	}
 	defer rows.Close()
-
-	log.Println("Rows:", rows)
 
 	u := User{}
 	var c1 int
