@@ -284,14 +284,14 @@ func IsUserAdmin(u UserPass) bool {
 	db, err := sql.Open("sqlite3", SQLFILE)
 	if err != nil {
 		log.Println(err)
-		return nil
+		return false
 	}
 	defer db.Close()
 
 	rows, err := db.Query("SELECT * FROM users WHERE Username = $1 \n", u.Username)
 	if err != nil {
 		log.Println(err)
-		return nil
+		return false
 	}
 
 	temp := User{}
@@ -306,7 +306,7 @@ func IsUserAdmin(u UserPass) bool {
 		err = rows.Scan(&c1, &c2, &c3, &c4, &c5, &c6)
 		if err != nil {
 			log.Println(err)
-			return []User{}
+			return false
 		}
 		temp = User{c1, c2, c3, c4, c5, c6}
 	}
