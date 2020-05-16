@@ -148,5 +148,10 @@ func LogoutHandler(rw http.ResponseWriter, r *http.Request) {
 // LoggedUsersHandler returns the list of currently logged in users
 func LoggedUsersHandler(rw http.ResponseWriter, r *http.Request) {
 	log.Println("Serving:", r.URL.Path, "from", r.Host)
-
+	err := SliceToJSON(ReturnLoggedUsers(), rw)
+	if err != nil {
+		log.Println(err)
+		rw.WriteHeader(http.StatusBadRequest)
+		return
+	}
 }

@@ -234,3 +234,40 @@ func FindUserUsername(username string) User {
 	}
 	return u
 }
+
+// ReturnLoggedUsers is for returning all logged in users
+func ReturnLoggedUsers() []User {
+	log.Println("Reading from SQLite3:", SQLFILE)
+	db, err := sql.Open("sqlite3", SQLFILE)
+	if err != nil {
+		log.Println(err)
+		return nil
+	}
+	defer db.Close()
+
+	rows, err := db.Query("SELECT * FROM users WHERE Active = true \n")
+	if err != nil {
+		log.Println(err)
+		return nil
+	}
+
+	all := []User{}
+	var c1 int
+	var c2, c3 string
+	var c4 int64
+	var c5, c6 bool
+
+	for rows.Next() {
+		err = rows.Scan(&c1, &c2, &c3, &c4, &c5, &c6)
+		if err != nil {
+			log.Println(err)
+			return []User{}
+		}
+		temp := User{c1, c2, c3, c4, c5, c6}
+		log.Println("temp:", all)
+		all = append(all, temp)
+	}
+
+	log.Println("Logged in:", all)
+	return all
+}
