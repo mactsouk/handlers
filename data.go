@@ -321,7 +321,7 @@ func IsUserAdmin(u UserPass) bool {
 	var c1 int
 	var c2, c3 string
 	var c4 int64
-	var c5, c6 bool
+	var c5, c6 int
 
 	// If there exist multiple users with the same username,
 	// we will get the FIRST ONE only.
