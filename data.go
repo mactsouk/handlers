@@ -94,6 +94,31 @@ func AddUser(u User) bool {
 	return true
 }
 
+// UpdateUser allows you to update user name
+func UpdateUser(u User) bool {
+	log.Println("Updating user:", u)
+
+	db, err := sql.Open("sqlite3", SQLFILE)
+	if err != nil {
+		log.Println(err)
+		return false
+	}
+	defer db.Close()
+
+	sqlStatement := `
+	UPDATE users
+	SET Username = $2, Password = $3, Admin = $4, Active = $5
+	WHERE ID = $1;`
+
+	_, err = db.Exec(sqlStatement, u.ID, u.Username, u.Password, u.Admin, u.Active)
+	if err != nil {
+		log.Println("Update:", err)
+		return false
+	}
+
+	return true
+}
+
 // CreateDatabase initializes the SQLite3 database and adds the admin user
 func CreateDatabase() bool {
 	log.Println("Writing to SQLite3:", SQLFILE)
@@ -163,7 +188,6 @@ func ReturnAllUsers() []User {
 	for rows.Next() {
 		err = rows.Scan(&c1, &c2, &c3, &c4, &c5, &c6)
 		temp := User{c1, c2, c3, c4, c5, c6}
-		log.Println("temp:", all)
 		all = append(all, temp)
 	}
 
@@ -312,6 +336,43 @@ func IsUserAdmin(u UserPass) bool {
 	}
 
 	if u.Username == temp.Username && u.Password == temp.Password && temp.Admin == true {
+		return true
+	}
+	return false
+}
+
+func IsUserValid(u UserPass) bool {
+	db, err := sql.Open("sqlite3", SQLFILE)
+	if err != nil {
+		log.Println(err)
+		return false
+	}
+	defer db.Close()
+
+	rows, err := db.Query("SELECT * FROM users WHERE Username = $1 \n", u.Username)
+	if err != nil {
+		log.Println(err)
+		return false
+	}
+
+	temp := User{}
+	var c1 int
+	var c2, c3 string
+	var c4 int64
+	var c5, c6 bool
+
+	// If there exist multiple users with the same username,
+	// we will get the FIRST ONE only.
+	for rows.Next() {
+		err = rows.Scan(&c1, &c2, &c3, &c4, &c5, &c6)
+		if err != nil {
+			log.Println(err)
+			return false
+		}
+		temp = User{c1, c2, c3, c4, c5, c6}
+	}
+
+	if u.Username == temp.Username && u.Password == temp.Password {
 		return true
 	}
 	return false
