@@ -55,14 +55,14 @@ func AddUser(u User) bool {
 	log.Println("Adding user:", u)
 	db, err := sql.Open("sqlite3", SQLFILE)
 	if err != nil {
-		log.Println(nil)
+		log.Println(err)
 		return false
 	}
 	defer db.Close()
 
 	stmt, err := db.Prepare("INSERT INTO user(Username, Password, Lastlogin, Admin, Active) values(?,?,?,?,?)")
 	if err != nil {
-		log.Println(nil)
+		log.Println(err)
 		return false
 	}
 
@@ -77,7 +77,7 @@ func CreateDatabase() bool {
 	defer db.Close()
 
 	if err != nil {
-		log.Println(nil)
+		log.Println(err)
 		return false
 	}
 
@@ -87,7 +87,7 @@ func CreateDatabase() bool {
 	log.Println("Creating table from scratch.")
 	_, err = db.Exec("CREATE TABLE users (ID integer NOT NULL PRIMARY KEY AUTOINCREMENT, Username TEXT, Password TEXT, Lastlogin integer, Admin Bool, Active Bool);")
 	if err != nil {
-		log.Println(nil)
+		log.Println(err)
 		return false
 	}
 
@@ -117,7 +117,7 @@ func ReturnAllUsers() []User {
 
 	rows, err := db.Query("SELECT * FROM users")
 	if err != nil {
-		log.Println(nil)
+		log.Println(err)
 		return nil
 	}
 
