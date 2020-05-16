@@ -37,6 +37,7 @@ type UserPass struct {
 
 // AddUser is for adding a new user to the database
 func AddUser(u User) bool {
+	log.Println("Adding user:", u)
 	db, err := sql.Open("sqlite3", SQLFILE)
 	if err != nil {
 		log.Println(nil)
