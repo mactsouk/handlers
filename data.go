@@ -62,6 +62,12 @@ func (p *User) ToJSON(w io.Writer) error {
 	return e.Encode(p)
 }
 
+// SliceToJSON encodes a slice with JSON records
+func SliceToJSON(slice interface{}, w io.Writer) error {
+	e := json.NewEncoder(w)
+	return e.Encode(slice)
+}
+
 // AddUser is for adding a new user to the database
 func AddUser(u User) bool {
 	log.Println("Adding user:", u)

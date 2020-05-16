@@ -56,14 +56,21 @@ func DeleteHandler(rw http.ResponseWriter, r *http.Request) {
 func GetAllHandler(rw http.ResponseWriter, r *http.Request) {
 	log.Println("Serving:", r.URL.Path, "from", r.Host)
 
-	for _, d := range ReturnAllUsers() {
-		err := d.ToJSON(rw)
-		if err != nil {
-			log.Println(err)
-			rw.WriteHeader(http.StatusBadRequest)
-			return
-		}
+	err := SliceToJSON(ReturnAllUsers(), rw)
+	if err != nil {
+		log.Println(err)
+		rw.WriteHeader(http.StatusBadRequest)
+		return
 	}
+
+	//	for _, d := range ReturnAllUsers() {
+	//		err := d.ToJSON(rw)
+	//		if err != nil {
+	//			log.Println(err)
+	//			rw.WriteHeader(http.StatusBadRequest)
+	//			return
+	//		}
+	//	}
 }
 
 // GetIDHandler returns the ID of an existing user
