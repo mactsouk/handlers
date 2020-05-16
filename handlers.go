@@ -106,8 +106,8 @@ func GetUserDataHandler(rw http.ResponseWriter, r *http.Request) {
 
 	log.Println("ID:", intID)
 	t := FindUserID(intID)
-	t, _ := PrettyJSON(u)
-	fmt.Println(t)
+	temp, _ := PrettyJSON(t)
+	fmt.Println(temp)
 	log.Println("Inside GetUserDataHandler()")
 
 	if t.Username != "" {
