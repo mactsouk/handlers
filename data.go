@@ -107,12 +107,12 @@ func UpdateUser(u User) bool {
 
 	sqlStatement := `
 	UPDATE users
-	SET Username = $2, Password = $3, Admin = $4, Active = $5
+	SET Username = $2, Password = $3, Admin = $4, Active = $5, LastLogin = $6
 	WHERE ID = $1;`
 
-	_, err = db.Exec(sqlStatement, u.ID, u.Username, u.Password, u.Admin, u.Active)
+	_, err = db.Exec(sqlStatement, u.ID, u.Username, u.Password, u.Admin, u.Active, u.LastLogin)
 	if err != nil {
-		log.Println("Update:", err)
+		log.Println("Update failed:", err)
 		return false
 	}
 

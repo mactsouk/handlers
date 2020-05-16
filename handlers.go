@@ -210,6 +210,8 @@ func LoginHandler(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	log.Println("Input user:", user)
+
 	if !IsUserValid(user) {
 		log.Println("User", user.Username, "exists!")
 		rw.WriteHeader(http.StatusBadRequest)
