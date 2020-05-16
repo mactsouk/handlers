@@ -174,8 +174,8 @@ func GetIDHandler(rw http.ResponseWriter, r *http.Request) {
 	}
 
 	t := FindUserUsername(user.Username)
-	Body := user.Username + " has ID: " + string(t.ID) + "\n"
-	fmt.Fprintf(rw, "%s", Body)
+	Body := "User " + user.Username + " has ID:"
+	fmt.Fprintf(rw, "%s %d\n", Body, t.ID)
 }
 
 // GetUserDataHandler + GET returns the full record of a user
