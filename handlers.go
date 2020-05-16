@@ -217,11 +217,19 @@ func LoginHandler(rw http.ResponseWriter, r *http.Request) {
 	}
 
 	t := FindUserUsername(user.Username)
+	log.Println("Loggin in:", t)
+
+	if t.Password != user.Password {
+		rw.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
 	t.LastLogin = time.Now().Unix()
 	t.Active = true
 	if UpdateUser(t) {
 		log.Println("User updated:", t)
 	} else {
+		log.Println("Update failed:", t)
 		rw.WriteHeader(http.StatusBadRequest)
 	}
 }
