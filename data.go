@@ -62,11 +62,10 @@ func AddUser(u User) bool {
 
 	stmt, err := db.Prepare("INSERT INTO users(Username, Password, Lastlogin, Admin, Active) values(?,?,?,?,?)")
 	if err != nil {
-		log.Println(err)
+		log.Println("Adduser:", err)
 		return false
 	}
-
-	stmt.Exec(u.ID, u.Username, u.Password, u.LastLogin, u.Admin, u.Active)
+	stmt.Exec(u.Username, u.Password, u.LastLogin, u.Admin, u.Active)
 	return true
 }
 
@@ -93,11 +92,7 @@ func CreateDatabase() bool {
 
 	log.Println("Populating", SQLFILE)
 	admin := User{0, "admin", "admin", time.Now().Unix(), true, false}
-
-	t, _ := PrettyJSON(admin)
-	log.Println(t)
 	return AddUser(admin)
-
 }
 
 // DeleteUser is for deleting a user defined by ID
@@ -130,6 +125,7 @@ func ReturnAllUsers() []User {
 	for rows.Next() {
 		err = rows.Scan(&c1, &c2, &c3, &c4, &c5, &c6)
 		temp := User{c1, c2, c3, c4, c5, c6}
+		log.Println("temp:", all)
 		all = append(all, temp)
 	}
 
