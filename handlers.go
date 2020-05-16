@@ -28,6 +28,7 @@ func MethodNotAllowedHandler(rw http.ResponseWriter, r *http.Request) {
 // TimeHandler is for handling /time
 func TimeHandler(rw http.ResponseWriter, r *http.Request) {
 	log.Println("Serving:", r.URL.Path, "from", r.Host)
+	rw.WriteHeader(http.StatusOK)
 	t := time.Now().Format(time.RFC1123)
 	Body := "The current time is: " + t + "\n"
 	fmt.Fprintf(rw, "%s", Body)
@@ -55,15 +56,14 @@ func DeleteHandler(rw http.ResponseWriter, r *http.Request) {
 func GetAllHandler(rw http.ResponseWriter, r *http.Request) {
 	log.Println("Serving:", r.URL.Path, "from", r.Host)
 
-	Body := "\n"
 	for _, d := range ReturnAllUsers() {
 		err := d.ToJSON(rw)
 		if err != nil {
 			log.Println(err)
+			return
 		}
-		fmt.Fprintf(rw, "%s", Body)
 	}
-
+	rw.WriteHeader(http.StatusOK)
 }
 
 // GetIDHandler returns the ID of an existing user
@@ -91,12 +91,14 @@ func UpdateHandler(rw http.ResponseWriter, r *http.Request) {
 }
 
 // LoginHandler is for updating the Login time of a user
+// And changing the Active field to true
 func LoginHandler(rw http.ResponseWriter, r *http.Request) {
 	log.Println("Serving:", r.URL.Path, "from", r.Host)
 
 }
 
 // LogoutHandler is for logging out a user
+// And changing the Active field to false
 func LogoutHandler(rw http.ResponseWriter, r *http.Request) {
 	log.Println("Serving:", r.URL.Path, "from", r.Host)
 
