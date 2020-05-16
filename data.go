@@ -175,10 +175,9 @@ func FindUserID(ID int) User {
 	}
 	defer db.Close()
 
-	q := "SELECT * FROM users where ID =" + string(ID)
-	rows, err := db.Query(q)
+	rows, err := db.Query("SELECT * FROM users where ID = $1 \n", ID)
 	if err != nil {
-		log.Println("Prepare:", err)
+		log.Println("Query:", err)
 		return User{}
 	}
 	defer rows.Close()
