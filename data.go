@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"io"
 	"log"
 	"time"
@@ -110,7 +109,7 @@ func CreateDatabase() bool {
 	}
 
 	log.Println("Populating", SQLFILE)
-	admin := User{0, "admin", "admin", time.Now().Unix(), true, false}
+	admin := User{-1, "admin", "admin", time.Now().Unix(), true, false}
 	return AddUser(admin)
 }
 
@@ -188,7 +187,6 @@ func FindUserID(ID int) User {
 	var c2, c3 string
 	var c4 int64
 	var c5, c6 bool
-	PrettyJSON(u)
 
 	for rows.Next() {
 		err = rows.Scan(&c1, &c2, &c3, &c4, &c5, &c6)
@@ -198,8 +196,6 @@ func FindUserID(ID int) User {
 		}
 		u = User{c1, c2, c3, c4, c5, c6}
 		log.Println("Found user:", u)
-		t, _ := PrettyJSON(u)
-		fmt.Println(t)
 	}
 	return u
 }
