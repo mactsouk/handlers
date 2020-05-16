@@ -1,20 +1,27 @@
 package handlers
 
 import (
+	"database/sql"
 	"encoding/json"
+	"fmt"
 	"io"
+	"log"
 	"time"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
+var SQLFILE = "/tmp/users.db"
+
+var USERID = 0
+
 type User struct {
-	ID        int       `json:"id"`
-	Username  string    `json:"user"`
-	Password  string    `json:"password"`
-	LastLogin time.Time `json:"lastlogin"`
-	Admin     bool      `json:"admin"`
-	Active    bool      `json:"active"`
+	ID        int    `json:"id"`
+	Username  string `json:"user"`
+	Password  string `json:"password"`
+	LastLogin string `json:"lastlogin"`
+	Admin     bool   `json:"admin"`
+	Active    bool   `json:"active"`
 }
 
 type Input struct {
@@ -30,8 +37,43 @@ type UserPass struct {
 
 // AddUser is for adding a new user to the database
 func AddUser(u User) bool {
+	db, err := sql.Open("sqlite3", SQLFILE)
+	if err != nil {
+		log.Println(nil)
+		return false
+	}
 
+	stmt, _ := db.Prepare("INSERT INTO user(Username, Password, Admin) values(?,?,?)")
+	_, _ = stmt.Exec(u.ID, u.Username, u.Password, u.LastLogin, u.Admin, u.Active)
+
+	USERID++
 	return true
+}
+
+// CreateDatabase initializes the SQLite3 database and adds the admin user
+func CreateDatabase() bool {
+	log.Println("Writing to SQLite3:", SQLFILE)
+	db, err := sql.Open("sqlite3", SQLFILE)
+
+	if err != nil {
+		log.Println(nil)
+		return false
+	}
+
+	log.Println("Emptying database table.")
+	_, _ = db.Exec("DROP TABLE users")
+
+	log.Println("Creating table from scratch.")
+	_, err = db.Exec("CREATE TABLE users (Username STRING, Password STRING, Admin Bool);")
+	if err != nil {
+		log.Println(nil)
+		return false
+	}
+
+	fmt.Println("Populating", SQLFILE)
+	admin := User{USERID, "admin", "admin", time.Now().Format(time.RFC850), true, true}
+	return AddUser(admin)
+
 }
 
 // DeleteUser is for deleting a user defined by ID
@@ -42,8 +84,30 @@ func DeleteUser(ID int) bool {
 
 // ReturnAllUsers is for returning all users from database
 func ReturnAllUsers() []User {
+	log.Println("Reading from SQLite3:", SQLFILE)
+	db, err := sql.Open("sqlite3", SQLFILE)
+	if err != nil {
+		log.Println(err)
+		return nil
+	}
 
-	return nil
+	rows, err := db.Query("SELECT * FROM users")
+	if err != nil {
+		log.Println(nil)
+		return nil
+	}
+
+	all := []User{}
+	var c1 int
+	var c2, c3, c4 string
+	var c5, c6 bool
+
+	for rows.Next() {
+		err = rows.Scan(&c1, &c2, &c3, &c4, &c5, &c6)
+		temp := User{c1, c2, c3, c4, c5, c6}
+		all = append(all, temp)
+	}
+	return all
 }
 
 // FindUserID is for returning a user record defined by ID
