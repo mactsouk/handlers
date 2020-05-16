@@ -195,7 +195,7 @@ func FindUserID(ID int) User {
 		err = rows.Scan(&c1, &c2, &c3, &c4, &c5, &c6)
 		if err != nil {
 			log.Println(err)
-			retrun User{}
+			return User{}
 		}
 		u = User{c1, c2, c3, c4, c5, c6}
 		PrettyJSON(u)
