@@ -54,15 +54,15 @@ func DeleteHandler(rw http.ResponseWriter, r *http.Request) {
 	}
 
 	d, err := ioutil.ReadAll(r.Body)
-	if len(d) == 0 {
-		rw.WriteHeader(http.StatusBadRequest)
-		log.Println("No input!")
-		return
-	}
-
 	if err != nil {
 		rw.WriteHeader(http.StatusBadRequest)
 		log.Println(err)
+		return
+	}
+
+	if len(d) == 0 {
+		rw.WriteHeader(http.StatusBadRequest)
+		log.Println("No input!")
 		return
 	}
 
@@ -73,8 +73,10 @@ func DeleteHandler(rw http.ResponseWriter, r *http.Request) {
 		rw.WriteHeader(http.StatusBadRequest)
 		return
 	}
+
 	if !IsUserAdmin(user) {
-		rw.WriteHeader(http.StatusBadRequest)
+		log.Println("User", user.Username, "is not admin!")
+		http.Error(rw, "Error:", http.StatusBadRequest)
 		return
 	}
 
