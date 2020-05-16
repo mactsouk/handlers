@@ -44,7 +44,7 @@ func AddUser(u User) bool {
 		return false
 	}
 
-	stmt, _ := db.Prepare("INSERT INTO user(Username, Password, Admin) values(?,?,?)")
+	stmt, _ := db.Prepare("INSERT INTO user(ID, Username, Password, Admin, Lastlogin, Admin, Active) values(?,?,?,?,?,?)")
 	_, _ = stmt.Exec(u.ID, u.Username, u.Password, u.LastLogin, u.Admin, u.Active)
 
 	USERID++
