@@ -132,6 +132,8 @@ func ReturnAllUsers() []User {
 		temp := User{c1, c2, c3, c4, c5, c6}
 		all = append(all, temp)
 	}
+
+	log.Println("All:", all)
 	return all
 }
 
