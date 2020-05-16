@@ -19,7 +19,7 @@ type User struct {
 	ID        int    `json:"id"`
 	Username  string `json:"user"`
 	Password  string `json:"password"`
-	LastLogin string `json:"lastlogin"`
+	LastLogin int64  `json:"lastlogin"`
 	Admin     bool   `json:"admin"`
 	Active    bool   `json:"active"`
 }
@@ -65,14 +65,14 @@ func CreateDatabase() bool {
 	_, _ = db.Exec("DROP TABLE users")
 
 	log.Println("Creating table from scratch.")
-	_, err = db.Exec("CREATE TABLE users (Username STRING, Password STRING, Admin Bool);")
+	_, err = db.Exec("CREATE TABLE users (ID INT, Username STRING, Password STRING, Lastlogin INT64, Admin Bool, Active Bool);")
 	if err != nil {
 		log.Println(nil)
 		return false
 	}
 
 	fmt.Println("Populating", SQLFILE)
-	admin := User{USERID, "admin", "admin", time.Now().Format(time.RFC850), true, true}
+	admin := User{USERID, "admin", "admin", time.Now().Unix(), true, true}
 	return AddUser(admin)
 
 }
