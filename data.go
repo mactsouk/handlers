@@ -69,7 +69,7 @@ func SliceToJSON(slice interface{}, w io.Writer) error {
 	return e.Encode(slice)
 }
 
-// SliceFromJSON decodes a slice with JSON records
+// SliceFromJSON decodes a serialized slice with JSON records
 func SliceFromJSON(slice interface{}, r io.Reader) error {
 	e := json.NewDecoder(r)
 	return e.Decode(slice)
@@ -276,4 +276,43 @@ func ReturnLoggedUsers() []User {
 
 	log.Println("Logged in:", all)
 	return all
+}
+
+// IsUserAdmin determines whether a user is
+// an administrator or not
+func IsUserAdmin(u UserPass) bool {
+	db, err := sql.Open("sqlite3", SQLFILE)
+	if err != nil {
+		log.Println(err)
+		return nil
+	}
+	defer db.Close()
+
+	rows, err := db.Query("SELECT * FROM users WHERE Username = $1 \n", u.Username)
+	if err != nil {
+		log.Println(err)
+		return nil
+	}
+
+	temp := User{}
+	var c1 int
+	var c2, c3 string
+	var c4 int64
+	var c5, c6 bool
+
+	// If there exist multiple users with the same username,
+	// we will get the FIRST ONE only.
+	for rows.Next() {
+		err = rows.Scan(&c1, &c2, &c3, &c4, &c5, &c6)
+		if err != nil {
+			log.Println(err)
+			return []User{}
+		}
+		temp = User{c1, c2, c3, c4, c5, c6}
+	}
+
+	if u.Username == temp.Username && u.Password == temp.Password && temp.Admin == true {
+		return true
+	}
+	return false
 }

@@ -1,7 +1,9 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
@@ -48,6 +50,23 @@ func DeleteHandler(rw http.ResponseWriter, r *http.Request) {
 	if !ok {
 		log.Println("ID value not set!")
 		rw.WriteHeader(http.StatusNotFound)
+		return
+	}
+
+	d, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		http.Error(rw, "Error:", http.StatusBadRequest)
+		return
+	}
+	var user = UserPass{}
+	err = json.Unmarshal(d, &user)
+	if err != nil {
+		log.Println(err)
+		http.Error(rw, "Error:", http.StatusBadRequest)
+		return
+	}
+	if !IsUserAdmin(user) {
+		http.Error(rw, "Error:", http.StatusBadRequest)
 		return
 	}
 
