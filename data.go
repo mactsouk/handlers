@@ -60,7 +60,7 @@ func AddUser(u User) bool {
 	}
 	defer db.Close()
 
-	stmt, err := db.Prepare("INSERT INTO user(Username, Password, Lastlogin, Admin, Active) values(?,?,?,?,?)")
+	stmt, err := db.Prepare("INSERT INTO users(Username, Password, Lastlogin, Admin, Active) values(?,?,?,?,?)")
 	if err != nil {
 		log.Println(err)
 		return false
