@@ -194,6 +194,8 @@ func FindUserID(ID int) User {
 		u = User{c1, c2, c3, c4, c5, c6}
 		log.Println("Found user:", u)
 	}
+
+	PrettyJSON(u)
 	return u
 }
 
