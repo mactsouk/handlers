@@ -227,7 +227,7 @@ func LoginHandler(rw http.ResponseWriter, r *http.Request) {
 	}
 
 	t.LastLogin = time.Now().Unix()
-	t.Active = true
+	t.Active = 1
 	if UpdateUser(t) {
 		log.Println("User updated:", t)
 	} else {

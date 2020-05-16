@@ -18,8 +18,8 @@ type User struct {
 	Username  string `json:"user"`
 	Password  string `json:"password"`
 	LastLogin int64  `json:"lastlogin"`
-	Admin     bool   `json:"admin"`
-	Active    bool   `json:"active"`
+	Admin     int    `json:"admin"`
+	Active    int    `json:"active"`
 }
 
 type Input struct {
@@ -105,8 +105,7 @@ func UpdateUser(u User) bool {
 	}
 	defer db.Close()
 
-	sqlStatement := `
-	UPDATE users
+	sqlStatement := `UPDATE users
 	SET Username = $2, Password = $3, Admin = $4, Active = $5, LastLogin = $6
 	WHERE ID = $1;`
 
@@ -133,14 +132,14 @@ func CreateDatabase() bool {
 	_, _ = db.Exec("DROP TABLE users")
 
 	log.Println("Creating table from scratch.")
-	_, err = db.Exec("CREATE TABLE users (ID integer NOT NULL PRIMARY KEY AUTOINCREMENT, Username TEXT, Password TEXT, Lastlogin integer, Admin Bool, Active Bool);")
+	_, err = db.Exec("CREATE TABLE users (ID integer NOT NULL PRIMARY KEY AUTOINCREMENT, Username TEXT, Password TEXT, Lastlogin integer, Admin Integer, Active Integer);")
 	if err != nil {
 		log.Println(err)
 		return false
 	}
 
 	log.Println("Populating", SQLFILE)
-	admin := User{-1, "admin", "admin", time.Now().Unix(), true, false}
+	admin := User{-1, "admin", "admin", time.Now().Unix(), 1, 0}
 	return AddUser(admin)
 }
 
@@ -183,7 +182,7 @@ func ReturnAllUsers() []User {
 	var c1 int
 	var c2, c3 string
 	var c4 int64
-	var c5, c6 bool
+	var c5, c6 int
 
 	for rows.Next() {
 		err = rows.Scan(&c1, &c2, &c3, &c4, &c5, &c6)
@@ -216,7 +215,7 @@ func FindUserID(ID int) User {
 	var c1 int
 	var c2, c3 string
 	var c4 int64
-	var c5, c6 bool
+	var c5, c6 int
 
 	for rows.Next() {
 		err = rows.Scan(&c1, &c2, &c3, &c4, &c5, &c6)
@@ -251,7 +250,7 @@ func FindUserUsername(username string) User {
 	var c1 int
 	var c2, c3 string
 	var c4 int64
-	var c5, c6 bool
+	var c5, c6 int
 
 	for rows.Next() {
 		err = rows.Scan(&c1, &c2, &c3, &c4, &c5, &c6)
@@ -275,7 +274,7 @@ func ReturnLoggedUsers() []User {
 	}
 	defer db.Close()
 
-	rows, err := db.Query("SELECT * FROM users WHERE Active = true \n")
+	rows, err := db.Query("SELECT * FROM users WHERE Active = 1 \n")
 	if err != nil {
 		log.Println(err)
 		return nil
@@ -285,7 +284,7 @@ func ReturnLoggedUsers() []User {
 	var c1 int
 	var c2, c3 string
 	var c4 int64
-	var c5, c6 bool
+	var c5, c6 int
 
 	for rows.Next() {
 		err = rows.Scan(&c1, &c2, &c3, &c4, &c5, &c6)
@@ -335,7 +334,7 @@ func IsUserAdmin(u UserPass) bool {
 		temp = User{c1, c2, c3, c4, c5, c6}
 	}
 
-	if u.Username == temp.Username && u.Password == temp.Password && temp.Admin == true {
+	if u.Username == temp.Username && u.Password == temp.Password && temp.Admin == 1 {
 		return true
 	}
 	return false
@@ -359,7 +358,7 @@ func IsUserValid(u UserPass) bool {
 	var c1 int
 	var c2, c3 string
 	var c4 int64
-	var c5, c6 bool
+	var c5, c6 int
 
 	// If there exist multiple users with the same username,
 	// we will get the FIRST ONE only.
