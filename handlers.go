@@ -51,8 +51,6 @@ func DeleteHandler(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Println("ID:", id)
-
 	intID, err := strconv.Atoi(id)
 	if err != nil {
 		log.Println("id", err)
@@ -102,6 +100,7 @@ func GetUserDataHandler(rw http.ResponseWriter, r *http.Request) {
 	if !ok {
 		log.Println("ID value not set!")
 		rw.WriteHeader(http.StatusBadRequest)
+		return
 	}
 
 	intID, err := strconv.Atoi(id)
@@ -111,22 +110,22 @@ func GetUserDataHandler(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Println("ID:", intID)
 	t := FindUserID(intID)
-	temp, _ := PrettyJSON(t)
-	fmt.Println(temp)
-	log.Println("Inside GetUserDataHandler()")
-
 	if t.Username != "" {
 		err := t.ToJSON(rw)
 		if err != nil {
 			rw.WriteHeader(http.StatusBadRequest)
 			log.Println(err)
+			return
+		} else {
+			rw.WriteHeader(http.StatusOK)
+			return
 		}
 	} else {
 		log.Println("User not found:", id)
+		rw.WriteHeader(http.StatusBadRequest)
+		return
 	}
-	rw.WriteHeader(http.StatusBadRequest)
 }
 
 // UpdateHandler is for updating the data of an existing user + PUT
