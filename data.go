@@ -182,6 +182,11 @@ func FindUserID(ID int) User {
 	}
 	defer rows.Close()
 
+	if rows.Next() == false {
+		log.Println("No user found:", ID)
+		return User{}
+	}
+
 	log.Println("Rows:", rows)
 
 	u := User{}
@@ -189,14 +194,15 @@ func FindUserID(ID int) User {
 	var c2, c3 string
 	var c4 int64
 	var c5, c6 bool
+	PrettyJSON(u)
 
 	for rows.Next() {
 		err = rows.Scan(&c1, &c2, &c3, &c4, &c5, &c6)
 		u = User{c1, c2, c3, c4, c5, c6}
+		PrettyJSON(u)
 		log.Println("Found user:", u)
 	}
 
-	PrettyJSON(u)
 	return u
 }
 
