@@ -25,7 +25,7 @@ type User struct {
 type Input struct {
 	Username string `json:"user"`
 	Password string `json:"password"`
-	Admin    bool   `json:"admin"`
+	Admin    int    `json:"admin"`
 }
 
 type UserPass struct {
