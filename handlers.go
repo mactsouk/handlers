@@ -53,7 +53,7 @@ func AddHandler(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var users = []UserPass{}
+	var users = []Input{}
 	err = json.Unmarshal(d, &users)
 	if err != nil {
 		log.Println(err)
