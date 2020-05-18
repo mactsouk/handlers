@@ -365,22 +365,9 @@ func LogoutHandler(rw http.ResponseWriter, r *http.Request) {
 // LoggedUsersHandler returns the list of currently logged in users
 func LoggedUsersHandler(rw http.ResponseWriter, r *http.Request) {
 	log.Println("Serving:", r.URL.Path, "from", r.Host)
-	// d, err := ioutil.ReadAll(r.Body)
-	// if err != nil {
-	//	rw.WriteHeader(http.StatusBadRequest)
-	//	log.Println(err)
-	//	return
-	// }
-
-	// if len(d) == 0 {
-	//	rw.WriteHeader(http.StatusBadRequest)
-	//	log.Println("No input!")
-	//	return
-	// }
-
 	var user = UserPass{}
 	err := user.FromJSON(r.Body)
-	// err = json.Unmarshal(d, &user)
+
 	if err != nil {
 		log.Println(err)
 		rw.WriteHeader(http.StatusBadRequest)
