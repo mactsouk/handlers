@@ -63,6 +63,11 @@ func AddHandler(rw http.ResponseWriter, r *http.Request) {
 
 	log.Println(users)
 
+	newUser := User{-1, users[1].Username, users[1].Username, time.Now().Unix(), users[1].Admin, 0}
+	result := AddUser(newUser)
+	if !result {
+		rw.WriteHeader(http.StatusBadRequest)
+	}
 }
 
 // DeleteHandler is for deleting an existing user + DELETE
