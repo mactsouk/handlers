@@ -40,6 +40,28 @@ func TimeHandler(rw http.ResponseWriter, r *http.Request) {
 // AddHandler is for adding a new user
 func AddHandler(rw http.ResponseWriter, r *http.Request) {
 	log.Println("Serving:", r.URL.Path, "from", r.Host)
+	d, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		rw.WriteHeader(http.StatusBadRequest)
+		log.Println(err)
+		return
+	}
+
+	if len(d) == 0 {
+		rw.WriteHeader(http.StatusBadRequest)
+		log.Println("No input!")
+		return
+	}
+
+	var users = []UserPass{}
+	err = json.Unmarshal(d, &users)
+	if err != nil {
+		log.Println(err)
+		rw.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	log.Println(users)
 
 }
 
