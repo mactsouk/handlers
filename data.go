@@ -51,8 +51,14 @@ func PrettyJSON(data interface{}) (string, error) {
 	return buffer.String(), nil
 }
 
-// FromJSON decodes a serialized JSON record
+// FromJSON decodes a serialized JSON record - User{}
 func (p *User) FromJSON(r io.Reader) error {
+	e := json.NewDecoder(r)
+	return e.Decode(p)
+}
+
+// FromJSON decodes a serialized JSON record - UserPass{}
+func (p *UserPass) FromJSON(r io.Reader) error {
 	e := json.NewDecoder(r)
 	return e.Decode(p)
 }

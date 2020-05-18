@@ -392,7 +392,8 @@ func LoggedUsersHandler(rw http.ResponseWriter, r *http.Request) {
 	}
 
 	var user = UserPass{}
-	err = json.Unmarshal(d, &user)
+	err = user.FromJSON(r.Body)
+	// err = json.Unmarshal(d, &user)
 	if err != nil {
 		log.Println(err)
 		rw.WriteHeader(http.StatusBadRequest)
