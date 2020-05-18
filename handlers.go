@@ -63,7 +63,14 @@ func AddHandler(rw http.ResponseWriter, r *http.Request) {
 
 	log.Println(users)
 
-	newUser := User{-1, users[1].Username, users[1].Username, time.Now().Unix(), users[1].Admin, 0}
+	u := UserPass{users[0].Username, users[0].Password}
+	if !IsUserAdmin(u) {
+		log.Println("Command issued by non-admin user:", u.Username)
+		rw.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	newUser := User{-1, users[1].Username, users[1].Password, time.Now().Unix(), users[1].Admin, 0}
 	result := AddUser(newUser)
 	if !result {
 		rw.WriteHeader(http.StatusBadRequest)
@@ -126,7 +133,6 @@ func DeleteHandler(rw http.ResponseWriter, r *http.Request) {
 			rw.WriteHeader(http.StatusNotFound)
 		}
 	}
-
 	rw.WriteHeader(http.StatusNotFound)
 }
 
@@ -261,8 +267,23 @@ func UpdateHandler(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Println(users)
+	u := UserPass{users[0].Username, users[0].Password}
+	if !IsUserAdmin(u) {
+		log.Println("Command issued by non-admin user:", u.Username)
+		rw.WriteHeader(http.StatusBadRequest)
+		return
+	}
 
+	log.Println(users)
+	t := FindUserUsername(users[1].Username)
+	t.Username = users[1].Username
+	t.Password = users[1].Password
+	t.Admin = users[1].Admin
+
+	if !UpdateUser(t) {
+		log.Println("Update failed:", t)
+		rw.WriteHeader(http.StatusBadRequest)
+	}
 }
 
 // LoginHandler is for updating the LastLogin time of a user
