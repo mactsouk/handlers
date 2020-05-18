@@ -87,21 +87,8 @@ func DeleteHandler(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	d, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		rw.WriteHeader(http.StatusBadRequest)
-		log.Println(err)
-		return
-	}
-
-	if len(d) == 0 {
-		rw.WriteHeader(http.StatusBadRequest)
-		log.Println("No input!")
-		return
-	}
-
 	var user = UserPass{}
-	err = json.Unmarshal(d, &user)
+	err := user.FromJSON(r.Body)
 	if err != nil {
 		log.Println(err)
 		rw.WriteHeader(http.StatusBadRequest)
