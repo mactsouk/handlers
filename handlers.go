@@ -95,6 +95,12 @@ func DeleteHandler(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	err = user.Validate()
+	if err != nil {
+		log.Println(err)
+		rw.WriteHeader(http.StatusBadRequest)
+	}
+
 	if !IsUserAdmin(user) {
 		log.Println("User", user.Username, "is not admin!")
 		rw.WriteHeader(http.StatusBadRequest)

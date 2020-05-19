@@ -8,6 +8,7 @@ import (
 	"log"
 	"time"
 
+	"github.com/go-playground/validator"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -29,8 +30,8 @@ type Input struct {
 }
 
 type UserPass struct {
-	Username string `json:"user"`
-	Password string `json:"password"`
+	Username string `json:"user" validate:"required"`
+	Password string `json:"password" validate:"required"`
 }
 
 const (
@@ -385,4 +386,10 @@ func IsUserValid(u UserPass) bool {
 		return true
 	}
 	return false
+}
+
+// Validate method validates the data of UserPass
+func (p *UserPass) Validate() error {
+	validate := validator.New()
+	return validate.Struct(p)
 }
