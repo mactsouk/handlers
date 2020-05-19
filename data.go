@@ -315,6 +315,12 @@ func ReturnLoggedUsers() []User {
 // IsUserAdmin determines whether a user is
 // an administrator or not
 func IsUserAdmin(u UserPass) bool {
+	err := u.Validate()
+	if err != nil {
+		log.Println("IsUserAdmin - Validate:", err)
+		return false
+	}
+
 	db, err := sql.Open("sqlite3", SQLFILE)
 	if err != nil {
 		log.Println(err)
@@ -352,6 +358,12 @@ func IsUserAdmin(u UserPass) bool {
 }
 
 func IsUserValid(u UserPass) bool {
+	err := u.Validate()
+	if err != nil {
+		log.Println("IsUserValid - Validate:", err)
+		return false
+	}
+
 	db, err := sql.Open("sqlite3", SQLFILE)
 	if err != nil {
 		log.Println(err)
