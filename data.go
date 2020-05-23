@@ -58,6 +58,12 @@ func (p *User) FromJSON(r io.Reader) error {
 	return e.Decode(p)
 }
 
+// ToJSON encodes a JSON record
+func (p *User) ToJSON(w io.Writer) error {
+	e := json.NewEncoder(w)
+	return e.Encode(p)
+}
+
 // FromJSON decodes a serialized JSON record - UserPass{}
 func (p *UserPass) FromJSON(r io.Reader) error {
 	e := json.NewDecoder(r)
@@ -65,7 +71,7 @@ func (p *UserPass) FromJSON(r io.Reader) error {
 }
 
 // ToJSON encodes a JSON record
-func (p *User) ToJSON(w io.Writer) error {
+func (p *UserPass) ToJSON(w io.Writer) error {
 	e := json.NewEncoder(w)
 	return e.Encode(p)
 }
