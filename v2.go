@@ -8,10 +8,10 @@ type V2Input struct {
 	U         User   `json:"load"`
 }
 
-func uploadFile(rw http.ResponseWriter, r *http.Request) {
+func UploadFile(rw http.ResponseWriter, r *http.Request) {
 
 }
 
-func sendFile(rw http.ResponseWriter, r *http.Request) {
+func SendFile(rw http.ResponseWriter, r *http.Request) {
 
 }
