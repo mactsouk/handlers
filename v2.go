@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"errors"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -35,6 +36,35 @@ func saveFile(path string, rw http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		return
 	}
+}
+
+func saveToFile(path string, contents io.Reader) error {
+	_, err := os.Stat(path)
+	if err == nil {
+		err = os.Remove(path)
+		if err != nil {
+			log.Println("Error deleting", path)
+			return err
+		}
+	} else if !os.IsNotExist(err) {
+		log.Println("Unexpected error:", err)
+		return err
+	}
+
+	// If everything is OK, create the file
+	f, err := os.Create(path)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	defer f.Close()
+
+	n, err := io.Copy(f, contents)
+	if err != nil {
+		return err
+	}
+	log.Println("Bytes written:", n)
+	return nil
 }
 
 func CreateImageDirectory(d string) error {
