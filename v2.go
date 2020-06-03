@@ -10,8 +10,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-var IMAGESPATH = "/tmp/files"
-
 type V2Input struct {
 	Username  string `json:"username"`
 	Upassword string `json:"password"`
