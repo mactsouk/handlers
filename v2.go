@@ -92,7 +92,7 @@ func CreateImageDirectory() error {
 
 func MiddleWare(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("Serving %s from %s", r.RequestURI, r.Host)
+		log.Printf("Serving %s from %s using %s method", r.RequestURI, r.Host, r.Method)
 		next.ServeHTTP(w, r)
 	})
 }
