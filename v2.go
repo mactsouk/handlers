@@ -16,6 +16,8 @@ type V2Input struct {
 	U         User   `json:"load"`
 }
 
+var IMAGESPATH string
+
 func UploadFile(rw http.ResponseWriter, r *http.Request) {
 	filename, ok := mux.Vars(r)["filename"]
 	if !ok {
@@ -65,7 +67,7 @@ func saveToFile(path string, contents io.Reader) error {
 	return nil
 }
 
-func CreateImageDirectory(d string) error {
+func CreateImageDirectory() error {
 	_, err := os.Stat(IMAGESPATH)
 	if os.IsNotExist(err) {
 		log.Println("Creating:", IMAGESPATH)
