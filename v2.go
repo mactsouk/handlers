@@ -230,11 +230,11 @@ func saveToFile(path string, contents io.Reader) error {
 	return nil
 }
 
-func CreateImageDirectory() error {
-	_, err := os.Stat(IMAGESPATH)
+func CreateImageDirectory(d string) error {
+	_, err := os.Stat(d)
 	if os.IsNotExist(err) {
-		log.Println("Creating:", IMAGESPATH)
-		err = os.MkdirAll(IMAGESPATH, 0755)
+		log.Println("Creating:", d)
+		err = os.MkdirAll(d, 0755)
 		if err != nil {
 			log.Println(err)
 			return err
@@ -244,10 +244,10 @@ func CreateImageDirectory() error {
 		return err
 	}
 
-	fileInfo, err := os.Stat(IMAGESPATH)
+	fileInfo, err := os.Stat(d)
 	mode := fileInfo.Mode()
 	if !mode.IsDir() {
-		msg := IMAGESPATH + " is not a directory!"
+		msg := d + " is not a directory!"
 		return errors.New(msg)
 	}
 	return nil
