@@ -1,8 +1,10 @@
 package handlers
 
 import (
+	"encoding/json"
 	"errors"
 	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -11,23 +13,98 @@ import (
 )
 
 type V2Input struct {
-	Username  string `json:"username"`
-	Upassword string `json:"password"`
-	U         User   `json:"load"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+	U        User   `json:"load"`
 }
 
 var IMAGESPATH string
 
 func AddHandlerV2(rw http.ResponseWriter, r *http.Request) {
+	log.Println("Serving:", r.URL.Path, "from", r.Host)
+	d, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		rw.WriteHeader(http.StatusBadRequest)
+		log.Println(err)
+		return
+	}
 
+	if len(d) == 0 {
+		rw.WriteHeader(http.StatusBadRequest)
+		log.Println("No input!")
+		return
+	}
+
+	var load = V2Input{}
+	err = json.Unmarshal(d, &load)
+	if err != nil {
+		log.Println(err)
+		rw.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	log.Println(load)
+
+	u := UserPass{load.Username, load.Password}
+	if !IsUserAdmin(u) {
+		log.Println("Command issued by non-admin user:", u.Username)
+		rw.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	newUser := load.U
+	result := AddUser(newUser)
+	if !result {
+		rw.WriteHeader(http.StatusBadRequest)
+	}
 }
 
 func LoginHandlerV2(rw http.ResponseWriter, r *http.Request) {
+	log.Println("Serving:", r.URL.Path, "from", r.Host)
+	d, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		rw.WriteHeader(http.StatusBadRequest)
+		log.Println(err)
+		return
+	}
 
+	if len(d) == 0 {
+		rw.WriteHeader(http.StatusBadRequest)
+		log.Println("No input!")
+		return
+	}
+
+	var load = V2Input{}
+	err = json.Unmarshal(d, &load)
+	if err != nil {
+		log.Println(err)
+		rw.WriteHeader(http.StatusBadRequest)
+		return
+	}
 }
 
 func LogoutHandlerV2(rw http.ResponseWriter, r *http.Request) {
+	log.Println("Serving:", r.URL.Path, "from", r.Host)
+	d, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		rw.WriteHeader(http.StatusBadRequest)
+		log.Println(err)
+		return
+	}
 
+	if len(d) == 0 {
+		rw.WriteHeader(http.StatusBadRequest)
+		log.Println("No input!")
+		return
+	}
+
+	var load = V2Input{}
+	err = json.Unmarshal(d, &load)
+	if err != nil {
+		log.Println(err)
+		rw.WriteHeader(http.StatusBadRequest)
+		return
+	}
 }
 
 func UploadFile(rw http.ResponseWriter, r *http.Request) {
