@@ -18,6 +18,18 @@ type V2Input struct {
 
 var IMAGESPATH string
 
+func AddHandlerV2(rw http.ResponseWriter, r *http.Request) {
+
+}
+
+func LoginHandlerV2(rw http.ResponseWriter, r *http.Request) {
+
+}
+
+func LogoutHandlerV2(rw http.ResponseWriter, r *http.Request) {
+
+}
+
 func UploadFile(rw http.ResponseWriter, r *http.Request) {
 	filename, ok := mux.Vars(r)["filename"]
 	if !ok {
