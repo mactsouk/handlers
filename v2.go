@@ -60,7 +60,6 @@ func AddHandlerV2(rw http.ResponseWriter, r *http.Request) {
 }
 
 func LoginHandlerV2(rw http.ResponseWriter, r *http.Request) {
-	log.Println("Serving:", r.URL.Path, "from", r.Host)
 	d, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		rw.WriteHeader(http.StatusBadRequest)
@@ -84,7 +83,6 @@ func LoginHandlerV2(rw http.ResponseWriter, r *http.Request) {
 }
 
 func LogoutHandlerV2(rw http.ResponseWriter, r *http.Request) {
-	log.Println("Serving:", r.URL.Path, "from", r.Host)
 	d, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		rw.WriteHeader(http.StatusBadRequest)
@@ -100,6 +98,82 @@ func LogoutHandlerV2(rw http.ResponseWriter, r *http.Request) {
 
 	var load = V2Input{}
 	err = json.Unmarshal(d, &load)
+	if err != nil {
+		log.Println(err)
+		rw.WriteHeader(http.StatusBadRequest)
+		return
+	}
+}
+
+func GetAllHandlerV2(rw http.ResponseWriter, r *http.Request) {
+	d, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		rw.WriteHeader(http.StatusBadRequest)
+		log.Println(err)
+		return
+	}
+
+	if len(d) == 0 {
+		rw.WriteHeader(http.StatusBadRequest)
+		log.Println("No input!")
+		return
+	}
+
+	var load = V2Input{}
+	err = json.Unmarshal(d, &load)
+	if err != nil {
+		log.Println(err)
+		rw.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	var user = UserPass{load.Username, load.Password}
+	if !IsUserAdmin(user) {
+		log.Println("User", user, "does not exist!")
+		rw.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	err = SliceToJSON(ReturnAllUsers(), rw)
+	if err != nil {
+		log.Println(err)
+		rw.WriteHeader(http.StatusBadRequest)
+		return
+	}
+}
+
+// GetAllHandlerUpdated is for `/v1/getall`.
+// The older version had a bug as it was using `IsUserValid` instead of `IsUserAdmin`.
+func GetAllHandlerUpdated(rw http.ResponseWriter, r *http.Request) {
+	log.Println("Serving:", r.URL.Path, "from", r.Host)
+	d, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		rw.WriteHeader(http.StatusBadRequest)
+		log.Println(err)
+		return
+	}
+
+	if len(d) == 0 {
+		rw.WriteHeader(http.StatusBadRequest)
+		log.Println("No input!")
+		return
+	}
+
+	var user = UserPass{}
+	err = json.Unmarshal(d, &user)
+	if err != nil {
+		log.Println(err)
+		rw.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	if !IsUserAdmin(user) {
+		log.Println("User", user, "does not exist!")
+		rw.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	err = SliceToJSON(ReturnAllUsers(), rw)
 	if err != nil {
 		log.Println(err)
 		rw.WriteHeader(http.StatusBadRequest)
