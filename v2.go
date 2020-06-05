@@ -6,6 +6,7 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net/http"
 	"os"
 
@@ -258,4 +259,28 @@ func MiddleWare(next http.Handler) http.Handler {
 		log.Printf("Serving %s from %s using %s method", r.RequestURI, r.Host, r.Method)
 		next.ServeHTTP(w, r)
 	})
+}
+
+// Generating Random Strings with a Given length
+func random(min, max int) int {
+	return rand.Intn(max-min) + min
+}
+
+func RandomPassword(l int) string {
+	Password := ""
+	rand.Seed(SEED)
+	MIN := 0
+	MAX := 94
+	startChar := "!"
+	i := 1
+	for {
+		myRand := random(MIN, MAX)
+		newChar := string(startChar[0] + byte(myRand))
+		Password += newChar
+		if i == l {
+			break
+		}
+		i++
+	}
+	return Password
 }
