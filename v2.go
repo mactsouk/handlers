@@ -82,6 +82,25 @@ func LoginHandlerV2(rw http.ResponseWriter, r *http.Request) {
 		rw.WriteHeader(http.StatusBadRequest)
 		return
 	}
+
+	var user = UserPass{load.Username, load.Password}
+	if !IsUserValid(user) {
+		log.Println("User", user.Username, "not valid!")
+		rw.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	t := FindUserUsername(user.Username)
+	log.Println("Logging in:", t)
+
+	t.LastLogin = time.Now().Unix()
+	t.Active = 1
+	if UpdateUser(t) {
+		log.Println("User updated:", t)
+	} else {
+		log.Println("Update failed:", t)
+		rw.WriteHeader(http.StatusBadRequest)
+	}
 }
 
 func LogoutHandlerV2(rw http.ResponseWriter, r *http.Request) {
@@ -104,6 +123,30 @@ func LogoutHandlerV2(rw http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		rw.WriteHeader(http.StatusBadRequest)
 		return
+	}
+
+	var user = UserPass{load.Username, load.Password}
+	err = json.Unmarshal(d, &user)
+	if err != nil {
+		log.Println(err)
+		rw.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	if !IsUserValid(user) {
+		log.Println("User", user.Username, "exists!")
+		rw.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	t := FindUserUsername(user.Username)
+	log.Println("Logging out:", t.Username)
+	t.Active = 0
+	if UpdateUser(t) {
+		log.Println("User updated:", t)
+	} else {
+		log.Println("Update failed:", t)
+		rw.WriteHeader(http.StatusBadRequest)
 	}
 }
 
