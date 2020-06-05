@@ -267,6 +267,7 @@ func random(min, max int) int {
 	return rand.Intn(max-min) + min
 }
 
+// RandomPassword generates random strings of given length
 func RandomPassword(l int) string {
 	Password := ""
 	rand.Seed(time.Now().Unix())
