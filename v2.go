@@ -170,8 +170,8 @@ func GetAllHandlerUpdated(rw http.ResponseWriter, r *http.Request) {
 	}
 
 	if !IsUserAdmin(user) {
-		log.Println("User", user, "does not exist!")
-		rw.WriteHeader(http.StatusBadRequest)
+		log.Println("User", user, "is not Admin!")
+		rw.WriteHeader(http.StatusForbidden)
 		return
 	}
 
