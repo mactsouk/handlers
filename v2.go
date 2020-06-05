@@ -9,6 +9,7 @@ import (
 	"math/rand"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/gorilla/mux"
 )
@@ -268,7 +269,7 @@ func random(min, max int) int {
 
 func RandomPassword(l int) string {
 	Password := ""
-	rand.Seed(SEED)
+	rand.Seed(time.Now().Unix())
 	MIN := 0
 	MAX := 94
 	startChar := "!"
