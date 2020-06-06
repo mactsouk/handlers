@@ -55,6 +55,7 @@ func AddHandlerV2(rw http.ResponseWriter, r *http.Request) {
 	}
 
 	newUser := load.U
+	log.Println("*** newUser:", newUser)
 	result := AddUser(newUser)
 	if !result {
 		rw.WriteHeader(http.StatusBadRequest)
