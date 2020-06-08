@@ -12,7 +12,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// DefaultHandler is for handling /
+// DefaultHandler is for handling everything that is not a match
 func DefaultHandler(rw http.ResponseWriter, r *http.Request) {
 	log.Println("Serving:", r.URL.Path, "from", r.Host, "with method", r.Method)
 	rw.WriteHeader(http.StatusNotFound)
